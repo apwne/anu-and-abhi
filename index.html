@@ -178,7 +178,7 @@
     .ornament-light::before { background: linear-gradient(to right, transparent, rgba(191,146,70,0.45)); }
     .ornament-light::after  { background: linear-gradient(to left,  transparent, rgba(191,146,70,0.45)); }
 
-    /* ── Responsive ── */
+    /* ── Mobile ── */
     @media (max-width: 768px) {
       #navbar, #navbar.scrolled { padding-left: 20px; padding-right: 20px; }
       #nav-links { display: none !important; }
@@ -186,6 +186,17 @@
       .story-grid  { grid-template-columns: 1fr !important; }
       .venue-grid  { grid-template-columns: 1fr !important; }
       .events-grid { grid-template-columns: 1fr !important; }
+      .story-photo-wrap { min-height: 360px !important; height: 360px !important; aspect-ratio: unset !important; }
+    }
+
+    /* ── Desktop enhancements ── */
+    @media (min-width: 769px) {
+      .hero-tagline   { font-size: 1.05rem !important; letter-spacing: 0.22em !important; }
+      .hero-dateline  { font-size: 0.92rem !important; }
+      .story-photo-wrap { aspect-ratio: unset !important; height: 100% !important; min-height: 560px !important; }
+      .photo-strip    { height: clamp(400px, 48vw, 620px) !important; }
+      .families-name  { font-size: clamp(1.8rem, 3.2vw, 3rem) !important; }
+      .families-quote { font-size: clamp(1.1rem, 1.8vw, 1.5rem) !important; }
     }
   </style>
 </head>
@@ -288,7 +299,7 @@
               align-items:center;justify-content:flex-end;text-align:center;
               padding:0 24px clamp(80px,11vh,110px);">
 
-    <p class="fu d1" style="color:var(--gold-lt);font-size:0.72rem;letter-spacing:0.28em;
+    <p class="fu d1 hero-tagline" style="color:var(--gold-lt);font-size:0.72rem;letter-spacing:0.28em;
                              text-transform:uppercase;margin-bottom:20px;">
       We are getting married
     </p>
@@ -301,7 +312,7 @@
       Abhishek
     </h1>
     <div class="fu d3" style="width:44px;height:1px;background:var(--gold);margin:0 auto 18px;"></div>
-    <p class="fu d4" style="color:rgba(250,247,240,0.62);font-size:0.8rem;letter-spacing:0.22em;text-transform:uppercase;">
+    <p class="fu d4 hero-dateline" style="color:rgba(250,247,240,0.62);font-size:0.8rem;letter-spacing:0.22em;text-transform:uppercase;">
       Sunday, 12 July 2026 &ensp;·&ensp; Navi Mumbai
     </p>
   </div>
@@ -324,10 +335,10 @@
 
       <!-- Photo -->
       <div class="reveal" style="position:relative;">
-        <div style="position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:3px;
+        <div class="story-photo-wrap" style="position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:3px;
                     box-shadow:0 12px 56px rgba(44,26,14,0.18),0 2px 8px rgba(44,26,14,0.08);">
           <img src="images/pre-wedding/img2.jpeg" alt="Our Story"
-               style="width:100%;height:100%;object-fit:cover;">
+               style="width:100%;height:100%;object-fit:cover;object-position:center top;">
           <div style="position:absolute;inset:0;
                       background:linear-gradient(to top,rgba(44,26,14,0.35) 0%,transparent 50%);"></div>
         </div>
@@ -364,9 +375,9 @@
 <!-- ══════════════════════════
      PHOTO STRIP (img3)
 ══════════════════════════ -->
-<div style="height:clamp(280px,40vw,480px);overflow:hidden;position:relative;">
+<div class="photo-strip" style="height:clamp(280px,40vw,480px);overflow:hidden;position:relative;">
   <img src="images/pre-wedding/img3.jpeg" alt="Anuradha and Abhishek"
-       style="width:100%;height:100%;object-fit:cover;object-position:center 30%;">
+       style="width:100%;height:100%;object-fit:cover;object-position:center center;">
   <div style="position:absolute;inset:0;
     background:linear-gradient(to right,rgba(32,18,8,0.45) 0%,transparent 35%,transparent 65%,rgba(32,18,8,0.45) 100%);"></div>
 </div>
@@ -384,7 +395,7 @@
       With the blessings of
     </p>
 
-    <p style="font-family:'Cormorant Garamond',serif;color:var(--bg);
+    <p class="families-name" style="font-family:'Cormorant Garamond',serif;color:var(--bg);
               font-size:clamp(1.4rem,3.5vw,2rem);font-weight:300;line-height:2.0;letter-spacing:0.02em;">
       Ardhendu Purkayastha &amp; Tapati Purkayastha
     </p>
@@ -393,13 +404,13 @@
       <span style="color:var(--gold);font-size:1.2rem;">✦</span>
     </div>
 
-    <p style="font-family:'Cormorant Garamond',serif;color:var(--bg);
+    <p class="families-name" style="font-family:'Cormorant Garamond',serif;color:var(--bg);
               font-size:clamp(1.4rem,3.5vw,2rem);font-weight:300;line-height:2.0;letter-spacing:0.02em;">
       Arun Dutta &amp; Tutul Dutta
     </p>
 
     <div style="margin:48px 0 0;">
-      <p style="font-family:'Cormorant Garamond',serif;color:rgba(250,247,240,0.55);
+      <p class="families-quote" style="font-family:'Cormorant Garamond',serif;color:rgba(250,247,240,0.55);
                 font-size:clamp(1.05rem,2.5vw,1.3rem);font-style:italic;line-height:2.0;">
         "Your presence is the greatest gift of all —<br>please come just as you are."
       </p>
@@ -447,12 +458,9 @@
         Sunday · 12 July 2026
       </div>
 
-      <h3 style="font-size:clamp(1.8rem,4vw,2.4rem);font-weight:400;color:var(--text);margin-bottom:8px;">
+      <h3 style="font-size:clamp(1.8rem,4vw,2.4rem);font-weight:400;color:var(--text);margin-bottom:38px;">
         Wedding &amp; Reception
       </h3>
-      <p style="color:var(--clay);font-size:0.84rem;letter-spacing:0.07em;margin-bottom:38px;">
-        Silver Jubilee Hall, Vashi, Navi Mumbai
-      </p>
 
       <div class="events-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:32px;">
         <div style="text-align:center;padding:24px 16px;background:var(--bg);border-radius:3px;">

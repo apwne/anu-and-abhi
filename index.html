@@ -7,186 +7,224 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --crimson: #8B1A1A;
-      --crimson-mid: #A52020;
-      --gold: #C9A227;
-      --gold-light: #E0B83D;
-      --cream: #FFF8F0;
-      --cream-mid: #FFF0E4;
-      --dark: #120606;
-      --dark-mid: #1E0A0A;
+      --bg:        #FAF7F0;
+      --bg-alt:    #F4EDE0;
+      --bg-deep:   #EDE0CC;
+      --dark:      #201208;
+      --dark-mid:  #2C1A0A;
+      --clay:      #9B5234;
+      --clay-deep: #7A3F28;
+      --gold:      #BF9246;
+      --gold-lt:   #D4AA68;
+      --sand:      #E2CBA8;
+      --text:      #2C1A0E;
+      --text-mid:  rgba(44,26,14,0.54);
+      --text-lt:   rgba(44,26,14,0.32);
     }
 
-    *, *::before, *::after { box-sizing: border-box; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
-
     body {
       font-family: 'Jost', sans-serif;
-      background: var(--cream);
-      color: #2D1A1A;
+      background: var(--bg);
+      color: var(--text);
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
-
     h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; }
 
     ::-webkit-scrollbar { width: 5px; }
-    ::-webkit-scrollbar-track { background: var(--cream); }
-    ::-webkit-scrollbar-thumb { background: var(--crimson); border-radius: 3px; }
+    ::-webkit-scrollbar-track { background: var(--bg); }
+    ::-webkit-scrollbar-thumb { background: var(--clay); border-radius: 3px; }
 
-    /* Music Overlay */
+    /* ── Overlay ── */
     #music-overlay {
       position: fixed; inset: 0;
-      background: rgba(18,6,6,0.97);
+      background: var(--dark);
       z-index: 200;
       display: flex; align-items: center; justify-content: center;
       transition: opacity 0.9s ease;
     }
 
-    /* Nav */
+    /* ── Nav ── */
     #navbar {
-      position: fixed; top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 18px 40px;
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 16px 48px;
       display: flex; align-items: center; justify-content: space-between;
-      transition: background 0.4s ease, box-shadow 0.4s ease;
+      transition: background 0.4s ease, box-shadow 0.4s ease, padding 0.3s ease;
     }
     #navbar.scrolled {
-      background: rgba(18,6,6,0.94);
+      background: rgba(32,18,8,0.93);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 2px 32px rgba(139,26,26,0.18);
+      box-shadow: 0 2px 28px rgba(0,0,0,0.25);
+      padding: 12px 48px;
     }
     .nav-link {
-      color: rgba(255,248,240,0.78);
-      font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,248,240,0.82);
+      font-size: 0.88rem;
+      letter-spacing: 0.06em;
       text-decoration: none;
-      transition: color 0.25s ease;
+      font-weight: 400;
+      transition: color 0.22s ease;
+      padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
     }
-    .nav-link:hover { color: var(--gold); }
-    .nav-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 2px; }
+    .nav-link:hover { color: var(--gold-lt); border-bottom-color: rgba(212,170,104,0.4); }
+    .nav-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 1px; }
 
-    /* Hamburger */
+    /* ── Hamburger ── */
     #hamburger {
       display: none; flex-direction: column; gap: 5px;
-      cursor: pointer; padding: 4px; background: none; border: none;
+      cursor: pointer; background: none; border: none; padding: 4px;
     }
     #hamburger span {
-      display: block; width: 24px; height: 1.5px;
-      background: rgba(255,248,240,0.8);
+      display: block; width: 26px; height: 1.5px;
+      background: rgba(255,248,240,0.85);
       transition: transform 0.3s ease, opacity 0.3s ease;
     }
     #mobile-menu {
       display: none; position: fixed; inset: 0;
-      background: rgba(18,6,6,0.97); z-index: 99;
-      flex-direction: column; align-items: center; justify-content: center; gap: 40px;
+      background: var(--dark); z-index: 99;
+      flex-direction: column; align-items: center; justify-content: center; gap: 44px;
     }
     #mobile-menu.open { display: flex; }
-    .mobile-nav-link {
+    .mobile-link {
       font-family: 'Cormorant Garamond', serif;
-      color: var(--cream); font-size: 2.2rem; font-weight: 300;
-      text-decoration: none; letter-spacing: 0.04em;
-      transition: color 0.25s ease;
+      color: var(--bg); font-size: 2.4rem; font-weight: 300;
+      text-decoration: none; letter-spacing: 0.03em;
+      transition: color 0.22s ease;
     }
-    .mobile-nav-link:hover { color: var(--gold); }
+    .mobile-link:hover { color: var(--gold-lt); }
 
-    /* Gallery */
-    .gallery-item { overflow: hidden; border-radius: 3px; cursor: pointer; }
-    .gallery-item img {
+    /* ── Mute button ── */
+    #mute-btn {
+      display: none; position: fixed; bottom: 28px; right: 28px;
+      z-index: 90; width: 50px; height: 50px; border-radius: 50%;
+      background: rgba(32,18,8,0.88); border: 1px solid rgba(191,146,70,0.4);
+      color: var(--gold-lt); font-size: 1.25rem; cursor: pointer;
+      align-items: center; justify-content: center;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    #mute-btn:hover  { transform: scale(1.08); background: rgba(32,18,8,0.96); }
+    #mute-btn:active { transform: scale(0.95); }
+
+    /* ── Scroll reveal ── */
+    .reveal {
+      opacity: 0; transform: translateY(26px);
+      transition: opacity 0.85s cubic-bezier(0.22,1,0.36,1), transform 0.85s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay { transition-delay: 0.15s; }
+
+    /* ── Hero text animation ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .fu  { animation: fadeUp 1s cubic-bezier(0.22,1,0.36,1) both; }
+    .d1  { animation-delay: 0.1s; }
+    .d2  { animation-delay: 0.28s; }
+    .d3  { animation-delay: 0.44s; }
+    .d4  { animation-delay: 0.58s; }
+
+    /* ── Gallery ── */
+    .gitem { overflow: hidden; border-radius: 3px; cursor: pointer; }
+    .gitem img {
       width: 100%; height: 100%; object-fit: cover;
       transition: transform 0.55s cubic-bezier(0.22,1,0.36,1), filter 0.55s cubic-bezier(0.22,1,0.36,1);
     }
-    .gallery-item:hover img { transform: scale(1.06); filter: brightness(0.82); }
+    .gitem:hover img { transform: scale(1.06); filter: brightness(0.84); }
 
-    /* Scroll reveal */
-    .reveal {
-      opacity: 0; transform: translateY(28px);
-      transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
+    /* ── Gallery tabs ── */
+    .gtab {
+      padding: 11px 32px; border: none; cursor: pointer;
+      font-family: 'Jost', sans-serif; font-size: 0.78rem;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      transition: background 0.22s ease, color 0.22s ease;
     }
-    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .gtab.on  { background: var(--clay); color: #FAF7F0; }
+    .gtab.off { background: transparent; color: var(--clay); }
+    .gtab:focus-visible { outline: 2px solid var(--clay); outline-offset: 2px; }
 
-    /* Hero animations */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(22px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .fade-up { animation: fadeUp 0.9s cubic-bezier(0.22,1,0.36,1) both; }
-    .d1 { animation-delay: 0.1s; }
-    .d2 { animation-delay: 0.25s; }
-    .d3 { animation-delay: 0.4s; }
-    .d4 { animation-delay: 0.55s; }
-
-    /* Tabs */
-    .gallery-tab {
-      padding: 10px 30px; font-family: 'Jost', sans-serif;
-      font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
-      border: none; cursor: pointer;
-      transition: background 0.25s ease, color 0.25s ease;
-    }
-    .gallery-tab:focus-visible { outline: 2px solid var(--crimson); outline-offset: 2px; }
-    .gallery-tab.active   { background: var(--crimson); color: var(--gold); }
-    .gallery-tab.inactive { background: transparent; color: var(--crimson); }
-
-    /* Contact card */
-    .contact-card {
+    /* ── Contact card ── */
+    .ccard {
       display: flex; align-items: center; justify-content: center; gap: 10px;
-      color: #1A0808; text-decoration: none;
-      font-size: 0.95rem; letter-spacing: 0.04em;
-      padding: 16px 28px;
-      border: 1px solid rgba(139,26,26,0.18); border-radius: 3px;
-      width: 100%; max-width: 300px;
+      color: var(--text); text-decoration: none; font-size: 0.95rem;
+      letter-spacing: 0.03em; padding: 16px 28px;
+      border: 1px solid var(--sand); border-radius: 3px;
+      width: 100%; max-width: 310px;
       transition: background 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
     }
-    .contact-card:hover  { background: #FFEEE4; border-color: rgba(139,26,26,0.35); transform: translateY(-2px); }
-    .contact-card:active { transform: translateY(0); }
-    .contact-card:focus-visible { outline: 2px solid var(--crimson); outline-offset: 3px; }
+    .ccard:hover  { background: var(--bg-alt); border-color: var(--clay); transform: translateY(-2px); }
+    .ccard:active { transform: none; }
+    .ccard:focus-visible { outline: 2px solid var(--clay); outline-offset: 3px; }
 
-    /* Responsive */
+    /* ── Thin ornamental rule ── */
+    .ornament {
+      display: flex; align-items: center; gap: 14px; justify-content: center; margin: 28px 0;
+    }
+    .ornament::before, .ornament::after {
+      content: ''; flex: 1; max-width: 100px; height: 1px;
+    }
+    .ornament-dark::before  { background: linear-gradient(to right, transparent, var(--sand)); }
+    .ornament-dark::after   { background: linear-gradient(to left,  transparent, var(--sand)); }
+    .ornament-light::before { background: linear-gradient(to right, transparent, rgba(191,146,70,0.45)); }
+    .ornament-light::after  { background: linear-gradient(to left,  transparent, rgba(191,146,70,0.45)); }
+
+    /* ── Responsive ── */
     @media (max-width: 768px) {
-      #navbar { padding: 16px 20px; }
+      #navbar, #navbar.scrolled { padding-left: 20px; padding-right: 20px; }
       #nav-links { display: none !important; }
       #hamburger { display: flex; }
-      .venue-grid { grid-template-columns: 1fr !important; }
+      .story-grid  { grid-template-columns: 1fr !important; }
+      .venue-grid  { grid-template-columns: 1fr !important; }
       .events-grid { grid-template-columns: 1fr !important; }
     }
   </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
+<!-- ══════════════════════════
      MUSIC OVERLAY
-══════════════════════════════════════ -->
+══════════════════════════ -->
 <div id="music-overlay">
-  <div style="text-align:center;padding:40px 32px;max-width:460px;">
-    <img src="images/logowh.jpeg" alt="Anu & Abhi logo"
-         style="width:96px;height:96px;object-fit:contain;border-radius:50%;margin:0 auto 32px;display:block;
-                box-shadow:0 0 0 1px rgba(201,162,39,0.3),0 8px 40px rgba(139,26,26,0.5);">
+  <div style="text-align:center;padding:48px 32px;max-width:460px;">
+    <img src="images/logowh.jpeg" alt="Logo"
+         style="width:100px;height:100px;object-fit:contain;border-radius:50%;
+                display:block;margin:0 auto 36px;
+                box-shadow:0 0 0 1px rgba(191,146,70,0.35),0 12px 48px rgba(0,0,0,0.5);">
 
-    <p style="color:var(--gold);font-size:0.7rem;letter-spacing:0.24em;text-transform:uppercase;margin-bottom:10px;">Welcome</p>
-    <h2 style="font-family:'Cormorant Garamond',serif;color:var(--cream);font-size:clamp(2rem,6vw,2.8rem);font-weight:300;line-height:1.12;margin-bottom:10px;">
+    <p style="color:var(--gold);font-size:0.68rem;letter-spacing:0.26em;text-transform:uppercase;margin-bottom:12px;">
+      Welcome
+    </p>
+    <h2 style="font-family:'Cormorant Garamond',serif;color:var(--bg);
+               font-size:clamp(2rem,6vw,2.9rem);font-weight:300;line-height:1.12;margin-bottom:10px;">
       Anuradha<br>
       <span style="color:var(--gold);font-style:italic;">&amp;</span><br>
       Abhishek
     </h2>
-    <p style="color:rgba(255,248,240,0.45);font-size:0.78rem;letter-spacing:0.1em;margin-bottom:30px;">12 July 2026</p>
-
-    <p style="color:rgba(255,248,240,0.6);font-size:0.85rem;line-height:1.85;margin-bottom:38px;">
+    <p style="color:rgba(250,247,240,0.4);font-size:0.78rem;letter-spacing:0.1em;margin-bottom:32px;">
+      12 July 2026
+    </p>
+    <p style="color:rgba(250,247,240,0.62);font-size:0.86rem;line-height:1.9;margin-bottom:40px;">
       🔊&ensp;Turn up the volume for the full experience
     </p>
-
     <button onclick="startExperience()"
-      style="background:linear-gradient(135deg,var(--crimson),var(--crimson-mid));
-             color:var(--gold);border:1px solid rgba(201,162,39,0.45);
-             padding:14px 48px;font-family:'Jost',sans-serif;font-size:0.74rem;
-             letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;border-radius:2px;
-             transition:transform 0.22s ease,box-shadow 0.22s ease;"
-      onmouseover="this.style.transform='scale(1.03)';this.style.boxShadow='0 8px 32px rgba(139,26,26,0.5)'"
-      onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none'"
-      onmousedown="this.style.transform='scale(0.98)'"
+      style="background:var(--clay);color:var(--bg);border:none;
+             padding:15px 52px;font-family:'Jost',sans-serif;font-size:0.78rem;
+             letter-spacing:0.16em;text-transform:uppercase;cursor:pointer;border-radius:2px;
+             transition:background 0.22s ease,transform 0.22s ease,box-shadow 0.22s ease;"
+      onmouseover="this.style.background='var(--clay-deep)';this.style.boxShadow='0 8px 28px rgba(155,82,52,0.45)'"
+      onmouseout="this.style.background='var(--clay)';this.style.boxShadow='none'"
+      onmousedown="this.style.transform='scale(0.97)'"
+      onmouseup="this.style.transform='scale(1)'"
     >Enter &rarr;</button>
   </div>
 </div>
@@ -195,16 +233,21 @@
   <source src="music/Shehnai.mpeg" type="audio/mpeg">
 </audio>
 
+<!-- Floating mute button -->
+<button id="mute-btn" onclick="toggleMute()" aria-label="Mute/unmute music">🔊</button>
 
-<!-- ══════════════════════════════════════
+
+<!-- ══════════════════════════
      NAVIGATION
-══════════════════════════════════════ -->
+══════════════════════════ -->
 <nav id="navbar" aria-label="Main navigation">
   <a href="#hero" style="line-height:0;">
-    <img src="images/logowh.jpeg" alt="Home" style="height:46px;width:46px;object-fit:contain;border-radius:50%;">
+    <img src="images/logowh.jpeg" alt="Home"
+         style="height:60px;width:60px;object-fit:contain;border-radius:50%;">
   </a>
 
-  <div id="nav-links" style="display:flex;gap:36px;align-items:center;">
+  <div id="nav-links" style="display:flex;gap:40px;align-items:center;">
+    <a href="#story"   class="nav-link">Our Story</a>
     <a href="#events"  class="nav-link">Events</a>
     <a href="#venue"   class="nav-link">Venue</a>
     <a href="#gallery" class="nav-link">Gallery</a>
@@ -216,144 +259,101 @@
   </button>
 </nav>
 
-<div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation">
-  <button onclick="toggleMenu()" aria-label="Close menu"
+<div id="mobile-menu" role="dialog" aria-modal="true">
+  <button onclick="toggleMenu()" aria-label="Close"
     style="position:absolute;top:22px;right:26px;background:none;border:none;
-           color:rgba(255,248,240,0.55);font-size:1.6rem;cursor:pointer;padding:4px;">&#10005;</button>
-  <a href="#events"  class="mobile-nav-link" onclick="toggleMenu()">Events</a>
-  <a href="#venue"   class="mobile-nav-link" onclick="toggleMenu()">Venue</a>
-  <a href="#gallery" class="mobile-nav-link" onclick="toggleMenu()">Gallery</a>
-  <a href="#contact" class="mobile-nav-link" onclick="toggleMenu()">Contact</a>
+           color:rgba(250,247,240,0.5);font-size:1.6rem;cursor:pointer;">&#10005;</button>
+  <a href="#story"   class="mobile-link" onclick="toggleMenu()">Our Story</a>
+  <a href="#events"  class="mobile-link" onclick="toggleMenu()">Events</a>
+  <a href="#venue"   class="mobile-link" onclick="toggleMenu()">Venue</a>
+  <a href="#gallery" class="mobile-link" onclick="toggleMenu()">Gallery</a>
+  <a href="#contact" class="mobile-link" onclick="toggleMenu()">Contact</a>
 </div>
 
 
-<!-- ══════════════════════════════════════
+<!-- ══════════════════════════
      HERO
-══════════════════════════════════════ -->
-<section id="hero" style="position:relative;height:100dvh;min-height:600px;overflow:hidden;background:var(--dark);">
-  <img src="images/img1.jpeg" alt="Anuradha and Abhishek"
+══════════════════════════ -->
+<section id="hero" style="position:relative;height:100dvh;min-height:620px;overflow:hidden;background:var(--dark);">
+  <img src="images/pre-wedding/img1.jpeg" alt="Anuradha and Abhishek"
        style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;">
 
+  <!-- Softer overlays for airy feel -->
   <div style="position:absolute;inset:0;
-    background:linear-gradient(to bottom,rgba(18,6,6,0.22) 0%,rgba(18,6,6,0.04) 32%,rgba(18,6,6,0.62) 70%,rgba(18,6,6,0.96) 100%);"></div>
+    background:linear-gradient(to bottom,rgba(32,18,8,0.15) 0%,rgba(32,18,8,0.0) 28%,rgba(32,18,8,0.45) 65%,rgba(32,18,8,0.9) 100%);"></div>
   <div style="position:absolute;inset:0;
-    background:radial-gradient(ellipse at 20% 65%,rgba(139,26,26,0.2) 0%,transparent 52%);"></div>
+    background:radial-gradient(ellipse at 20% 70%,rgba(155,82,52,0.15) 0%,transparent 50%);"></div>
 
   <div style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;
               align-items:center;justify-content:flex-end;text-align:center;
-              padding:0 24px clamp(72px,10vh,100px);">
+              padding:0 24px clamp(80px,11vh,110px);">
 
-    <p class="fade-up d1" style="color:var(--gold);font-size:0.68rem;letter-spacing:0.26em;text-transform:uppercase;margin-bottom:20px;opacity:.88;">
-      Together with their families
+    <p class="fu d1" style="color:var(--gold-lt);font-size:0.72rem;letter-spacing:0.28em;
+                             text-transform:uppercase;margin-bottom:20px;">
+      We are getting married
     </p>
-    <h1 class="fade-up d2"
-        style="font-family:'Cormorant Garamond',serif;color:var(--cream);
-               font-size:clamp(3.2rem,9vw,6.6rem);font-weight:300;
-               letter-spacing:-0.03em;line-height:1.0;margin-bottom:20px;">
+    <h1 class="fu d2"
+        style="font-family:'Cormorant Garamond',serif;color:var(--bg);
+               font-size:clamp(3.4rem,9.5vw,7rem);font-weight:300;
+               letter-spacing:-0.03em;line-height:0.98;margin-bottom:22px;">
       Anuradha<br>
-      <span style="color:var(--gold);font-style:italic;font-size:0.7em;">&amp;</span><br>
+      <span style="color:var(--gold);font-style:italic;font-size:0.65em;">&amp;</span><br>
       Abhishek
     </h1>
-    <div class="fade-up d3" style="width:44px;height:1px;background:var(--gold);margin:0 auto 18px;"></div>
-    <p class="fade-up d4" style="color:rgba(255,248,240,0.65);font-size:0.78rem;letter-spacing:0.22em;text-transform:uppercase;">
-      12 July 2026 &ensp;·&ensp; Navi Mumbai
+    <div class="fu d3" style="width:44px;height:1px;background:var(--gold);margin:0 auto 18px;"></div>
+    <p class="fu d4" style="color:rgba(250,247,240,0.62);font-size:0.8rem;letter-spacing:0.22em;text-transform:uppercase;">
+      Sunday, 12 July 2026 &ensp;·&ensp; Navi Mumbai
     </p>
   </div>
 
   <div style="position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
-              display:flex;flex-direction:column;align-items:center;gap:7px;opacity:0.4;pointer-events:none;">
-    <span style="color:var(--cream);font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;">Scroll</span>
-    <div style="width:1px;height:38px;background:linear-gradient(to bottom,var(--gold),transparent);"></div>
+              display:flex;flex-direction:column;align-items:center;gap:7px;
+              opacity:0.38;pointer-events:none;">
+    <span style="color:var(--bg);font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;">Scroll</span>
+    <div style="width:1px;height:36px;background:linear-gradient(to bottom,var(--gold-lt),transparent);"></div>
   </div>
 </section>
 
 
-<!-- ══════════════════════════════════════
-     FAMILIES
-══════════════════════════════════════ -->
-<section style="background:var(--dark-mid);padding:90px 24px;text-align:center;position:relative;overflow:hidden;">
-  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(201,162,39,0.05) 0%,transparent 65%);pointer-events:none;"></div>
-  <div class="reveal" style="position:relative;z-index:1;max-width:760px;margin:0 auto;">
-    <p style="color:rgba(201,162,39,0.65);font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:22px;">With the blessings of</p>
-    <p style="font-family:'Cormorant Garamond',serif;color:var(--cream);
-              font-size:clamp(1rem,2.8vw,1.35rem);font-weight:300;line-height:2.1;letter-spacing:0.02em;">
-      Ardhendu Purkayastha &amp; Tapati Purkayastha
-      <br><span style="color:rgba(255,248,240,0.32);font-size:0.78em;">together with</span><br>
-      Arun Dutta &amp; Tutul Dutta
-    </p>
+<!-- ══════════════════════════
+     OUR STORY
+══════════════════════════ -->
+<section id="story" style="background:var(--bg);padding:100px 0;">
+  <div style="max-width:1100px;margin:0 auto;padding:0 40px;">
+    <div class="story-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:center;">
 
-    <div style="display:flex;align-items:center;gap:14px;justify-content:center;margin:36px 0;">
-      <div style="flex:1;max-width:110px;height:1px;background:linear-gradient(to right,transparent,rgba(201,162,39,0.4));"></div>
-      <span style="color:var(--gold);font-size:1.3rem;">✦</span>
-      <div style="flex:1;max-width:110px;height:1px;background:linear-gradient(to left,transparent,rgba(201,162,39,0.4));"></div>
-    </div>
-
-    <p style="font-family:'Cormorant Garamond',serif;color:rgba(255,248,240,0.58);
-              font-size:clamp(1rem,2.5vw,1.2rem);font-style:italic;line-height:1.95;">
-      "Your presence is the greatest gift of all —<br>please come just as you are."
-    </p>
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════
-     COUNTDOWN
-══════════════════════════════════════ -->
-<section style="background:var(--cream-mid);padding:72px 24px;text-align:center;">
-  <p class="reveal" style="color:var(--crimson);font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:28px;">
-    Counting down to the big day
-  </p>
-  <div id="countdown" class="reveal"
-       style="display:flex;gap:clamp(10px,4vw,52px);justify-content:center;align-items:center;flex-wrap:wrap;">
-  </div>
-</section>
-
-
-<!-- ══════════════════════════════════════
-     EVENTS
-══════════════════════════════════════ -->
-<section id="events" style="background:var(--cream);padding:100px 24px;">
-  <div style="max-width:720px;margin:0 auto;text-align:center;">
-    <p class="reveal" style="color:var(--crimson);font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:10px;">Save the Date</p>
-    <h2 class="reveal" style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.4rem);
-                               font-weight:400;color:#1A0808;letter-spacing:-0.025em;margin-bottom:56px;">
-      The Celebrations
-    </h2>
-
-    <div class="reveal"
-         style="border:1px solid rgba(139,26,26,0.12);background:#fff;border-radius:4px;
-                padding:clamp(32px,6vw,56px) clamp(22px,6vw,52px);
-                box-shadow:0 6px 48px rgba(139,26,26,0.07),0 1px 4px rgba(139,26,26,0.04);
-                max-width:580px;margin:0 auto;">
-
-      <div style="display:inline-block;background:var(--crimson);color:var(--gold);
-                  padding:6px 22px;border-radius:2px;font-size:0.63rem;letter-spacing:0.16em;
-                  text-transform:uppercase;margin-bottom:28px;">Sunday · 12 July 2026</div>
-
-      <h3 style="font-size:clamp(1.7rem,4vw,2.3rem);font-weight:400;color:#1A0808;margin-bottom:6px;">
-        Wedding &amp; Reception
-      </h3>
-      <p style="color:var(--crimson);font-size:0.82rem;letter-spacing:0.07em;margin-bottom:36px;">
-        Silver Jubilee Hall, Vashi, Navi Mumbai
-      </p>
-
-      <div class="events-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:30px;">
-        <div style="text-align:center;padding:22px 14px;background:var(--cream);border-radius:3px;">
-          <p style="color:var(--crimson);font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:10px;">Ceremony Begins</p>
-          <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,4vw,2.1rem);color:#1A0808;font-weight:400;line-height:1;">6:15 PM</p>
-          <p style="color:rgba(26,8,8,0.36);font-size:0.7rem;margin-top:7px;">onwards</p>
+      <!-- Photo -->
+      <div class="reveal" style="position:relative;">
+        <div style="position:relative;aspect-ratio:3/4;overflow:hidden;border-radius:3px;
+                    box-shadow:0 12px 56px rgba(44,26,14,0.18),0 2px 8px rgba(44,26,14,0.08);">
+          <img src="images/pre-wedding/img2.jpeg" alt="Our Story"
+               style="width:100%;height:100%;object-fit:cover;">
+          <div style="position:absolute;inset:0;
+                      background:linear-gradient(to top,rgba(44,26,14,0.35) 0%,transparent 50%);"></div>
         </div>
-        <div style="text-align:center;padding:22px 14px;background:var(--cream);border-radius:3px;">
-          <p style="color:var(--crimson);font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:10px;">Dinner</p>
-          <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,4vw,2.1rem);color:#1A0808;font-weight:400;line-height:1;">7:30 PM</p>
-          <p style="color:rgba(26,8,8,0.36);font-size:0.7rem;margin-top:7px;">until 10:30 PM</p>
-        </div>
+        <!-- decorative offset border -->
+        <div style="position:absolute;top:18px;left:-18px;right:18px;bottom:-18px;
+                    border:1px solid var(--sand);border-radius:3px;z-index:-1;"></div>
       </div>
 
-      <div style="border-top:1px solid rgba(139,26,26,0.1);padding-top:24px;">
-        <p style="color:rgba(26,8,8,0.5);font-size:0.82rem;line-height:1.85;">
-          👗&ensp;<strong style="color:#1A0808;font-weight:500;">Dress Code:</strong>
-          Wear whatever makes you comfortable.<br>Your presence is what matters most.
+      <!-- Text -->
+      <div class="reveal reveal-delay">
+        <p style="color:var(--clay);font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:14px;">
+          Our Story
+        </p>
+        <h2 style="font-family:'Cormorant Garamond',serif;
+                   font-size:clamp(2.4rem,4.5vw,3.4rem);font-weight:400;
+                   color:var(--text);letter-spacing:-0.025em;line-height:1.1;margin-bottom:28px;">
+          Two hearts,<br>one beautiful journey
+        </h2>
+        <div style="width:36px;height:1px;background:var(--clay);margin-bottom:28px;"></div>
+        <p style="color:var(--text-mid);font-size:1rem;line-height:1.88;margin-bottom:20px;">
+          Some stories are written in the stars. Anuradha and Abhishek's journey began with a
+          fateful encounter, and what followed was a beautiful unfolding of friendship, trust, and love.
+        </p>
+        <p style="color:var(--text-mid);font-size:1rem;line-height:1.88;">
+          Today, they stand at the threshold of a new chapter — one they are overjoyed to share with the
+          people who matter most. We cannot wait to celebrate with you.
         </p>
       </div>
     </div>
@@ -361,49 +361,162 @@
 </section>
 
 
-<!-- ══════════════════════════════════════
+<!-- ══════════════════════════
+     PHOTO STRIP (img3)
+══════════════════════════ -->
+<div style="height:clamp(280px,40vw,480px);overflow:hidden;position:relative;">
+  <img src="images/pre-wedding/img3.jpeg" alt="Anuradha and Abhishek"
+       style="width:100%;height:100%;object-fit:cover;object-position:center 30%;">
+  <div style="position:absolute;inset:0;
+    background:linear-gradient(to right,rgba(32,18,8,0.45) 0%,transparent 35%,transparent 65%,rgba(32,18,8,0.45) 100%);"></div>
+</div>
+
+
+<!-- ══════════════════════════
+     FAMILIES / BLESSINGS
+══════════════════════════ -->
+<section style="background:var(--dark);padding:100px 24px;text-align:center;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;
+    background:radial-gradient(ellipse at 50% 50%,rgba(191,146,70,0.07) 0%,transparent 65%);pointer-events:none;"></div>
+
+  <div class="reveal" style="position:relative;z-index:1;max-width:860px;margin:0 auto;">
+    <p style="color:rgba(191,146,70,0.65);font-size:0.68rem;letter-spacing:0.24em;text-transform:uppercase;margin-bottom:28px;">
+      With the blessings of
+    </p>
+
+    <p style="font-family:'Cormorant Garamond',serif;color:var(--bg);
+              font-size:clamp(1.4rem,3.5vw,2rem);font-weight:300;line-height:2.0;letter-spacing:0.02em;">
+      Ardhendu Purkayastha &amp; Tapati Purkayastha
+    </p>
+
+    <div class="ornament ornament-light">
+      <span style="color:var(--gold);font-size:1.2rem;">✦</span>
+    </div>
+
+    <p style="font-family:'Cormorant Garamond',serif;color:var(--bg);
+              font-size:clamp(1.4rem,3.5vw,2rem);font-weight:300;line-height:2.0;letter-spacing:0.02em;">
+      Arun Dutta &amp; Tutul Dutta
+    </p>
+
+    <div style="margin:48px 0 0;">
+      <p style="font-family:'Cormorant Garamond',serif;color:rgba(250,247,240,0.55);
+                font-size:clamp(1.05rem,2.5vw,1.3rem);font-style:italic;line-height:2.0;">
+        "Your presence is the greatest gift of all —<br>please come just as you are."
+      </p>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════
+     COUNTDOWN
+══════════════════════════ -->
+<section style="background:var(--bg-alt);padding:80px 24px;text-align:center;">
+  <p class="reveal" style="color:var(--clay);font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:32px;">
+    Counting down to the big day
+  </p>
+  <div id="countdown" class="reveal"
+       style="display:flex;gap:clamp(10px,4vw,56px);justify-content:center;align-items:center;flex-wrap:wrap;">
+  </div>
+</section>
+
+
+<!-- ══════════════════════════
+     EVENTS
+══════════════════════════ -->
+<section id="events" style="background:var(--bg);padding:100px 24px;">
+  <div style="max-width:740px;margin:0 auto;text-align:center;">
+    <p class="reveal" style="color:var(--clay);font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:12px;">
+      Save the Date
+    </p>
+    <h2 class="reveal" style="font-family:'Cormorant Garamond',serif;
+                               font-size:clamp(2.4rem,5vw,3.6rem);font-weight:400;
+                               color:var(--text);letter-spacing:-0.025em;margin-bottom:60px;">
+      The Celebrations
+    </h2>
+
+    <div class="reveal"
+         style="border:1px solid var(--sand);background:#fff;border-radius:4px;
+                padding:clamp(36px,6vw,60px) clamp(24px,6vw,56px);
+                box-shadow:0 6px 48px rgba(44,26,14,0.07),0 1px 4px rgba(44,26,14,0.04);
+                max-width:580px;margin:0 auto;">
+
+      <div style="display:inline-block;background:var(--clay);color:#FAF7F0;
+                  padding:7px 24px;border-radius:2px;font-size:0.65rem;letter-spacing:0.16em;
+                  text-transform:uppercase;margin-bottom:30px;">
+        Sunday · 12 July 2026
+      </div>
+
+      <h3 style="font-size:clamp(1.8rem,4vw,2.4rem);font-weight:400;color:var(--text);margin-bottom:8px;">
+        Wedding &amp; Reception
+      </h3>
+      <p style="color:var(--clay);font-size:0.84rem;letter-spacing:0.07em;margin-bottom:38px;">
+        Silver Jubilee Hall, Vashi, Navi Mumbai
+      </p>
+
+      <div class="events-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:32px;">
+        <div style="text-align:center;padding:24px 16px;background:var(--bg);border-radius:3px;">
+          <p style="color:var(--clay);font-size:0.62rem;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:10px;">Ceremony Begins</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,4vw,2.2rem);color:var(--text);line-height:1;">6:15 PM</p>
+          <p style="color:var(--text-lt);font-size:0.72rem;margin-top:7px;">onwards</p>
+        </div>
+        <div style="text-align:center;padding:24px 16px;background:var(--bg);border-radius:3px;">
+          <p style="color:var(--clay);font-size:0.62rem;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:10px;">Dinner</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.7rem,4vw,2.2rem);color:var(--text);line-height:1;">7:30 PM</p>
+          <p style="color:var(--text-lt);font-size:0.72rem;margin-top:7px;">until 10:30 PM</p>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid var(--bg-deep);padding-top:26px;">
+        <p style="color:var(--text-mid);font-size:0.84rem;line-height:1.88;">
+          👗&ensp;<strong style="color:var(--text);font-weight:500;">Dress Code:</strong>
+          Wear whatever makes you comfortable — your presence is what matters.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════
      VENUE
-══════════════════════════════════════ -->
+══════════════════════════ -->
 <section id="venue" style="background:var(--dark);padding:100px 24px;">
   <div style="max-width:1040px;margin:0 auto;">
     <div class="reveal" style="text-align:center;margin-bottom:64px;">
-      <p style="color:rgba(201,162,39,0.65);font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:10px;">Find Us Here</p>
-      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.4rem);
-                 font-weight:400;color:var(--cream);letter-spacing:-0.025em;">The Venue</h2>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,3.6rem);
+                 font-weight:400;color:var(--bg);letter-spacing:-0.025em;">The Venue</h2>
     </div>
 
-    <div class="venue-grid reveal"
-         style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;">
+    <div class="venue-grid reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;">
 
       <!-- Info + QR -->
-      <div style="display:flex;flex-direction:column;gap:22px;">
-        <div style="background:rgba(255,248,240,0.04);border:1px solid rgba(201,162,39,0.13);border-radius:4px;padding:36px;">
-          <h3 style="font-family:'Cormorant Garamond',serif;color:var(--cream);font-size:1.7rem;font-weight:400;margin-bottom:18px;">
-            Silver Jubilee Hall
-          </h3>
-          <p style="color:rgba(255,248,240,0.48);font-size:0.8rem;letter-spacing:0.06em;line-height:2.1;">
+      <div style="display:flex;flex-direction:column;gap:20px;">
+        <div style="background:rgba(250,247,240,0.05);border:1px solid rgba(226,203,168,0.18);
+                    border-radius:4px;padding:38px;">
+          <h3 style="font-family:'Cormorant Garamond',serif;color:var(--bg);
+                     font-size:1.8rem;font-weight:400;margin-bottom:20px;">Silver Jubilee Hall</h3>
+          <p style="color:rgba(250,247,240,0.5);font-size:0.82rem;line-height:2.1;letter-spacing:0.05em;">
             Navi Mumbai Sports Association<br>
             Sector 1A, Vashi<br>
             Navi Mumbai – 400703<br>
             (Opposite MGM Hospital)
           </p>
-          <a href="https://maps.google.com/?q=Navi+Mumbai+Sports+Association+Sector+1A+Vashi+Navi+Mumbai+400703"
+          <a href="https://maps.google.com/?q=Navi+Mumbai+Sports+Association,+Sector+1A,+Vashi,+Navi+Mumbai,+Maharashtra+400703"
              target="_blank" rel="noopener noreferrer"
-             style="display:inline-flex;align-items:center;gap:8px;margin-top:26px;
-                    color:var(--gold);font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;
-                    text-decoration:none;border-bottom:1px solid rgba(201,162,39,0.26);padding-bottom:3px;
-                    transition:color 0.22s ease;"
-             onmouseover="this.style.color='var(--gold-light)'"
-             onmouseout="this.style.color='var(--gold)'">
-            Open in Google Maps &rarr;
-          </a>
+             style="display:inline-flex;align-items:center;gap:8px;margin-top:28px;
+                    color:var(--gold-lt);font-size:0.74rem;letter-spacing:0.12em;text-transform:uppercase;
+                    text-decoration:none;border-bottom:1px solid rgba(212,170,104,0.3);padding-bottom:3px;
+                    transition:color 0.22s ease,border-color 0.22s ease;"
+             onmouseover="this.style.color='#E8C87A';this.style.borderColor='rgba(232,200,122,0.5)'"
+             onmouseout="this.style.color='var(--gold-lt)';this.style.borderColor='rgba(212,170,104,0.3)'"
+          >Open in Google Maps &rarr;</a>
         </div>
 
-        <div style="background:rgba(255,248,240,0.04);border:1px solid rgba(201,162,39,0.13);
+        <div style="background:rgba(250,247,240,0.05);border:1px solid rgba(226,203,168,0.18);
                     border-radius:4px;padding:30px;text-align:center;">
-          <p style="color:rgba(201,162,39,0.62);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:18px;">
-            Scan for Directions
-          </p>
+          <p style="color:rgba(191,146,70,0.65);font-size:0.62rem;letter-spacing:0.2em;
+                    text-transform:uppercase;margin-bottom:18px;">Scan for Directions</p>
           <img src="images/QRcode.jpeg" alt="Venue QR Code"
                style="width:148px;height:148px;object-fit:contain;background:#fff;
                       padding:10px;border-radius:4px;display:inline-block;">
@@ -411,14 +524,14 @@
       </div>
 
       <!-- Map -->
-      <div style="border-radius:4px;overflow:hidden;box-shadow:0 8px 56px rgba(0,0,0,0.45);min-height:420px;">
+      <div style="border-radius:4px;overflow:hidden;box-shadow:0 8px 56px rgba(0,0,0,0.45);">
         <iframe
-          src="https://maps.google.com/maps?q=Navi+Mumbai+Sports+Association+Sector+1A+Vashi+Navi+Mumbai+400703&output=embed&z=15"
-          width="100%" height="420"
+          src="https://maps.google.com/maps?q=Navi+Mumbai+Sports+Association,+Sector+1A,+Vashi,+Navi+Mumbai,+Maharashtra+400703&output=embed&z=15"
+          width="100%" height="440"
           style="border:none;display:block;"
           loading="lazy"
           allowfullscreen
-          title="Wedding Venue Map"
+          title="Venue Map"
         ></iframe>
       </div>
     </div>
@@ -426,45 +539,45 @@
 </section>
 
 
-<!-- ══════════════════════════════════════
+<!-- ══════════════════════════
      GALLERY
-══════════════════════════════════════ -->
-<section id="gallery" style="background:var(--cream-mid);padding:100px 24px;">
+══════════════════════════ -->
+<section id="gallery" style="background:var(--bg-alt);padding:100px 24px;">
   <div style="max-width:1160px;margin:0 auto;">
-    <div class="reveal" style="text-align:center;margin-bottom:16px;">
-      <p style="color:var(--crimson);font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:10px;">Memories</p>
-      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.4rem);
-                 font-weight:400;color:#1A0808;letter-spacing:-0.025em;margin-bottom:36px;">Gallery</h2>
-
-      <div style="display:inline-flex;border:1px solid rgba(139,26,26,0.2);border-radius:3px;overflow:hidden;">
-        <button class="gallery-tab active"  id="tab-pre" onclick="showTab('pre')">Pre&#8209;Wedding</button>
-        <button class="gallery-tab inactive" id="tab-wed" onclick="showTab('wed')">Wedding</button>
+    <div class="reveal" style="text-align:center;margin-bottom:20px;">
+      <p style="color:var(--clay);font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:12px;">
+        Memories
+      </p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,3.6rem);
+                 font-weight:400;color:var(--text);letter-spacing:-0.025em;margin-bottom:36px;">
+        Gallery
+      </h2>
+      <div style="display:inline-flex;border:1px solid var(--sand);border-radius:3px;overflow:hidden;">
+        <button class="gtab on"  id="tab-pre" onclick="showTab('pre')">Pre&#8209;Wedding</button>
+        <button class="gtab off" id="tab-wed" onclick="showTab('wed')">Wedding</button>
       </div>
     </div>
 
-    <!-- Pre-Wedding -->
     <div id="grid-pre" class="reveal"
-         style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:40px;">
-      <div class="gallery-item" style="position:relative;aspect-ratio:3/4;box-shadow:0 4px 28px rgba(139,26,26,0.1);">
+         style="display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:16px;margin-top:40px;">
+      <div class="gitem" style="aspect-ratio:3/4;box-shadow:0 4px 24px rgba(44,26,14,0.1);">
         <img src="images/pre-wedding/img1.jpeg" alt="Pre-Wedding Photo 1">
-        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(18,6,6,0.48) 0%,transparent 52%);pointer-events:none;"></div>
       </div>
-      <div class="gallery-item" style="position:relative;aspect-ratio:3/4;box-shadow:0 4px 28px rgba(139,26,26,0.1);">
+      <div class="gitem" style="aspect-ratio:3/4;box-shadow:0 4px 24px rgba(44,26,14,0.1);">
         <img src="images/pre-wedding/img2.jpeg" alt="Pre-Wedding Photo 2">
-        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(18,6,6,0.48) 0%,transparent 52%);pointer-events:none;"></div>
       </div>
-      <div class="gallery-item" style="position:relative;aspect-ratio:3/4;box-shadow:0 4px 28px rgba(139,26,26,0.1);">
+      <div class="gitem" style="aspect-ratio:3/4;box-shadow:0 4px 24px rgba(44,26,14,0.1);">
         <img src="images/pre-wedding/img3.jpeg" alt="Pre-Wedding Photo 3">
-        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(18,6,6,0.48) 0%,transparent 52%);pointer-events:none;"></div>
       </div>
     </div>
 
-    <!-- Wedding (placeholder) -->
     <div id="grid-wed" style="display:none;margin-top:40px;">
-      <div style="border:2px dashed rgba(139,26,26,0.17);border-radius:6px;padding:72px 40px;text-align:center;">
-        <p style="font-family:'Cormorant Garamond',serif;color:var(--crimson);font-size:2rem;font-weight:300;margin-bottom:12px;">Coming Soon</p>
-        <p style="color:rgba(26,8,8,0.4);font-size:0.85rem;line-height:1.85;">
-          Wedding photographs will be added here after the celebration.<br>
+      <div style="border:2px dashed var(--sand);border-radius:6px;padding:72px 40px;text-align:center;">
+        <p style="font-family:'Cormorant Garamond',serif;color:var(--clay);font-size:2rem;font-weight:300;margin-bottom:12px;">
+          Coming Soon
+        </p>
+        <p style="color:var(--text-mid);font-size:0.88rem;line-height:1.85;">
+          Wedding photographs will appear here after the celebration.<br>
           Check back after 12 July 2026!
         </p>
       </div>
@@ -473,113 +586,124 @@
 </section>
 
 
-<!-- ══════════════════════════════════════
+<!-- ══════════════════════════
      CONTACT
-══════════════════════════════════════ -->
-<section id="contact" style="background:var(--cream);padding:100px 24px;text-align:center;">
+══════════════════════════ -->
+<section id="contact" style="background:var(--bg);padding:100px 24px;text-align:center;">
   <div style="max-width:580px;margin:0 auto;">
-    <p class="reveal" style="color:var(--crimson);font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:10px;">Reach Out</p>
-    <h2 class="reveal" style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.4rem);
-                               font-weight:400;color:#1A0808;letter-spacing:-0.025em;margin-bottom:14px;">
+    <p class="reveal" style="color:var(--clay);font-size:0.68rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:12px;">
+      Reach Out
+    </p>
+    <h2 class="reveal" style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,3.6rem);
+                               font-weight:400;color:var(--text);letter-spacing:-0.025em;margin-bottom:14px;">
       Get in Touch
     </h2>
-    <p class="reveal" style="color:rgba(26,8,8,0.44);font-size:0.84rem;line-height:1.8;margin-bottom:48px;">
+    <p class="reveal" style="color:var(--text-mid);font-size:0.88rem;line-height:1.85;margin-bottom:48px;">
       For any queries about the celebration, feel free to call.
     </p>
     <div class="reveal" style="display:flex;flex-direction:column;gap:14px;align-items:center;">
-      <a href="tel:+917710930440" class="contact-card">📞&ensp;+91 77109 30440</a>
-      <a href="tel:+917738857508" class="contact-card">📞&ensp;+91 77388 57508</a>
-      <a href="tel:+919892475166" class="contact-card">📞&ensp;+91 98924 75166</a>
+      <a href="tel:+917710930440" class="ccard">📞&ensp;+91 77109 30440</a>
+      <a href="tel:+917738857508" class="ccard">📞&ensp;+91 77388 57508</a>
+      <a href="tel:+919892475166" class="ccard">📞&ensp;+91 98924 75166</a>
     </div>
   </div>
 </section>
 
 
-<!-- ══════════════════════════════════════
+<!-- ══════════════════════════
      FOOTER
-══════════════════════════════════════ -->
+══════════════════════════ -->
 <footer style="background:var(--dark);padding:64px 24px 48px;text-align:center;">
   <img src="images/logowh.jpeg" alt="Logo"
-       style="width:58px;height:58px;object-fit:contain;border-radius:50%;
-              margin:0 auto 24px;display:block;opacity:0.72;">
-  <p style="font-family:'Cormorant Garamond',serif;color:rgba(255,248,240,0.86);
-            font-size:1.3rem;font-style:italic;font-weight:300;margin-bottom:8px;">
+       style="width:60px;height:60px;object-fit:contain;border-radius:50%;
+              display:block;margin:0 auto 26px;opacity:0.72;">
+  <p style="font-family:'Cormorant Garamond',serif;color:rgba(250,247,240,0.85);
+            font-size:1.35rem;font-style:italic;font-weight:300;margin-bottom:8px;">
     Anuradha &amp; Abhishek
   </p>
-  <p style="color:rgba(201,162,39,0.52);font-size:0.63rem;letter-spacing:0.18em;text-transform:uppercase;">
+  <p style="color:rgba(191,146,70,0.52);font-size:0.65rem;letter-spacing:0.18em;text-transform:uppercase;">
     12 July 2026
   </p>
-  <div style="width:40px;height:1px;background:rgba(201,162,39,0.25);margin:22px auto 18px;"></div>
-  <p style="color:rgba(255,248,240,0.2);font-size:0.68rem;letter-spacing:0.05em;">Made with love ♥</p>
+  <div style="width:40px;height:1px;background:rgba(191,146,70,0.24);margin:22px auto 18px;"></div>
+  <p style="color:rgba(250,247,240,0.18);font-size:0.7rem;">Made with love ♥</p>
 </footer>
 
 
-<!-- ══════════════════════════════════════
+<!-- ══════════════════════════
      SCRIPTS
-══════════════════════════════════════ -->
+══════════════════════════ -->
 <script>
-  /* Music overlay */
+  /* ── Music overlay ── */
   function startExperience() {
     const overlay = document.getElementById('music-overlay');
     const music   = document.getElementById('bg-music');
+    const muteBtn = document.getElementById('mute-btn');
     overlay.style.opacity = '0';
     setTimeout(() => { overlay.style.display = 'none'; }, 900);
     music.volume = 0.38;
     music.play().catch(() => {});
+    muteBtn.style.display = 'flex';
   }
 
-  /* Countdown */
+  /* ── Mute toggle ── */
+  function toggleMute() {
+    const music = document.getElementById('bg-music');
+    const btn   = document.getElementById('mute-btn');
+    music.muted  = !music.muted;
+    btn.textContent = music.muted ? '🔇' : '🔊';
+  }
+
+  /* ── Countdown ── */
   function renderCountdown() {
-    const target = new Date('2026-07-12T18:15:00');
-    const diff   = target - new Date();
-    const el     = document.getElementById('countdown');
+    const diff = new Date('2026-07-12T18:15:00') - new Date();
+    const el   = document.getElementById('countdown');
     if (!el) return;
 
     if (diff <= 0) {
-      el.innerHTML = `<p style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--crimson);">Today is the big day! 🎉</p>`;
+      el.innerHTML = `<p style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--clay);">Today is the big day! 🎉</p>`;
       return;
     }
 
     const units = [
-      { v: Math.floor(diff / 86400000),               l: 'Days' },
-      { v: Math.floor((diff % 86400000) / 3600000),   l: 'Hours' },
-      { v: Math.floor((diff % 3600000)  / 60000),     l: 'Mins' },
-      { v: Math.floor((diff % 60000)    / 1000),      l: 'Secs' },
+      { v: Math.floor(diff / 86400000),             l: 'Days' },
+      { v: Math.floor((diff % 86400000) / 3600000), l: 'Hours' },
+      { v: Math.floor((diff % 3600000)  / 60000),   l: 'Mins' },
+      { v: Math.floor((diff % 60000)    / 1000),    l: 'Secs' },
     ];
 
     el.innerHTML = units.map((u, i) => `
-      <div style="text-align:center;min-width:60px;">
+      <div style="text-align:center;min-width:64px;">
         <div style="font-family:'Cormorant Garamond',serif;
-                    font-size:clamp(2.4rem,7vw,4rem);font-weight:300;
-                    color:var(--crimson);line-height:1;">
+                    font-size:clamp(2.5rem,7vw,4.2rem);font-weight:300;
+                    color:var(--clay);line-height:1;">
           ${String(u.v).padStart(2,'0')}
         </div>
-        <div style="color:rgba(26,8,8,0.36);font-size:0.6rem;letter-spacing:0.16em;
-                    text-transform:uppercase;margin-top:8px;">${u.l}</div>
+        <div style="color:var(--text-lt);font-size:0.62rem;letter-spacing:0.16em;
+                    text-transform:uppercase;margin-top:9px;">${u.l}</div>
       </div>
-      ${i < 3 ? `<div style="font-family:'Cormorant Garamond',serif;font-size:2rem;
-                             color:rgba(139,26,26,0.25);align-self:flex-start;margin-top:4px;">:</div>` : ''}
+      ${i < 3 ? `<div style="font-family:'Cormorant Garamond',serif;font-size:2.2rem;
+                             color:var(--sand);align-self:flex-start;margin-top:4px;">:</div>` : ''}
     `).join('');
   }
   renderCountdown();
   setInterval(renderCountdown, 1000);
 
-  /* Gallery tabs */
+  /* ── Gallery tabs ── */
   function showTab(type) {
-    const pre = document.getElementById('grid-pre');
-    const wed = document.getElementById('grid-wed');
+    const pre  = document.getElementById('grid-pre');
+    const wed  = document.getElementById('grid-wed');
     const tPre = document.getElementById('tab-pre');
     const tWed = document.getElementById('tab-wed');
     if (type === 'pre') {
-      pre.style.display = 'grid'; wed.style.display = 'none';
-      tPre.className = 'gallery-tab active'; tWed.className = 'gallery-tab inactive';
+      pre.style.display = 'grid';  wed.style.display = 'none';
+      tPre.className = 'gtab on';  tWed.className = 'gtab off';
     } else {
-      pre.style.display = 'none'; wed.style.display = 'block';
-      tPre.className = 'gallery-tab inactive'; tWed.className = 'gallery-tab active';
+      pre.style.display = 'none';  wed.style.display = 'block';
+      tPre.className = 'gtab off'; tWed.className = 'gtab on';
     }
   }
 
-  /* Mobile menu */
+  /* ── Mobile menu ── */
   let menuOpen = false;
   function toggleMenu() {
     menuOpen = !menuOpen;
@@ -587,12 +711,12 @@
     document.body.style.overflow = menuOpen ? 'hidden' : '';
   }
 
-  /* Navbar scroll effect */
+  /* ── Navbar scroll ── */
   window.addEventListener('scroll', () => {
     document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
   }, { passive: true });
 
-  /* Scroll reveal */
+  /* ── Scroll reveal ── */
   const obs = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }

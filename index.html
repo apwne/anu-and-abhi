@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Anuradha & Abhishek | 12 July 2026</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --crimson: #8B1A1A;
+      --crimson-mid: #A52020;
+      --gold: #C9A227;
+      --gold-light: #E0B83D;
+      --cream: #FFF8F0;
+      --cream-mid: #FFF0E4;
+      --dark: #120606;
+      --dark-mid: #1E0A0A;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      background: var(--cream);
+      color: #2D1A1A;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Cormorant Garamond', serif; }
+
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--crimson); border-radius: 3px; }
+
+    /* Music Overlay */
+    #music-overlay {
+      position: fixed; inset: 0;
+      background: rgba(18,6,6,0.97);
+      z-index: 200;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity 0.9s ease;
+    }
+
+    /* Nav */
+    #navbar {
+      position: fixed; top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 18px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background 0.4s ease, box-shadow 0.4s ease;
+    }
+    #navbar.scrolled {
+      background: rgba(18,6,6,0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 2px 32px rgba(139,26,26,0.18);
+    }
+    .nav-link {
+      color: rgba(255,248,240,0.78);
+      font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+      text-decoration: none;
+      transition: color 0.25s ease;
+    }
+    .nav-link:hover { color: var(--gold); }
+    .nav-link:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 2px; }
+
+    /* Hamburger */
+    #hamburger {
+      display: none; flex-direction: column; gap: 5px;
+      cursor: pointer; padding: 4px; background: none; border: none;
+    }
+    #hamburger span {
+      display: block; width: 24px; height: 1.5px;
+      background: rgba(255,248,240,0.8);
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    #mobile-menu {
+      display: none; position: fixed; inset: 0;
+      background: rgba(18,6,6,0.97); z-index: 99;
+      flex-direction: column; align-items: center; justify-content: center; gap: 40px;
+    }
+    #mobile-menu.open { display: flex; }
+    .mobile-nav-link {
+      font-family: 'Cormorant Garamond', serif;
+      color: var(--cream); font-size: 2.2rem; font-weight: 300;
+      text-decoration: none; letter-spacing: 0.04em;
+      transition: color 0.25s ease;
+    }
+    .mobile-nav-link:hover { color: var(--gold); }
+
+    /* Gallery */
+    .gallery-item { overflow: hidden; border-radius: 3px; cursor: pointer; }
+    .gallery-item img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform 0.55s cubic-bezier(0.22,1,0.36,1), filter 0.55s cubic-bezier(0.22,1,0.36,1);
+    }
+    .gallery-item:hover img { transform: scale(1.06); filter: brightness(0.82); }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity 0.8s cubic-bezier(0.22,1,0.36,1), transform 0.8s cubic-bezier(0.22,1,0.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    /* Hero animations */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-up { animation: fadeUp 0.9s cubic-bezier(0.22,1,0.36,1) both; }
+    .d1 { animation-delay: 0.1s; }
+    .d2 { animation-delay: 0.25s; }
+    .d3 { animation-delay: 0.4s; }
+    .d4 { animation-delay: 0.55s; }
+
+    /* Tabs */
+    .gallery-tab {
+      padding: 10px 30px; font-family: 'Jost', sans-serif;
+      font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
+      border: none; cursor: pointer;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+    .gallery-tab:focus-visible { outline: 2px solid var(--crimson); outline-offset: 2px; }
+    .gallery-tab.active   { background: var(--crimson); color: var(--gold); }
+    .gallery-tab.inactive { background: transparent; color: var(--crimson); }
+
+    /* Contact card */
+    .contact-card {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      color: #1A0808; text-decoration: none;
+      font-size: 0.95rem; letter-spacing: 0.04em;
+      padding: 16px 28px;
+      border: 1px solid rgba(139,26,26,0.18); border-radius: 3px;
+      width: 100%; max-width: 300px;
+      transition: background 0.22s ease, border-color 0.22s ease, transform 0.22s ease;
+    }
+    .contact-card:hover  { background: #FFEEE4; border-color: rgba(139,26,26,0.35); transform: translateY(-2px); }
+    .contact-card:active { transform: translateY(0); }
+    .contact-card:focus-visible { outline: 2px solid var(--crimson); outline-offset: 3px; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      #navbar { padding: 16px 20px; }
+      #nav-links { display: none !important; }
+      #hamburger { display: flex; }
+      .venue-grid { grid-template-columns: 1fr !important; }
+      .events-grid { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════
+     MUSIC OVERLAY
+══════════════════════════════════════ -->
+<div id="music-overlay">
+  <div style="text-align:center;padding:40px 32px;max-width:460px;">
+    <img src="images/logowh.jpeg" alt="Anu & Abhi logo"
+         style="width:96px;height:96px;object-fit:contain;border-radius:50%;margin:0 auto 32px;display:block;
+                box-shadow:0 0 0 1px rgba(201,162,39,0.3),0 8px 40px rgba(139,26,26,0.5);">
+
+    <p style="color:var(--gold);font-size:0.7rem;letter-spacing:0.24em;text-transform:uppercase;margin-bottom:10px;">Welcome</p>
+    <h2 style="font-family:'Cormorant Garamond',serif;color:var(--cream);font-size:clamp(2rem,6vw,2.8rem);font-weight:300;line-height:1.12;margin-bottom:10px;">
+      Anuradha<br>
+      <span style="color:var(--gold);font-style:italic;">&amp;</span><br>
+      Abhishek
+    </h2>
+    <p style="color:rgba(255,248,240,0.45);font-size:0.78rem;letter-spacing:0.1em;margin-bottom:30px;">12 July 2026</p>
+
+    <p style="color:rgba(255,248,240,0.6);font-size:0.85rem;line-height:1.85;margin-bottom:38px;">
+      🔊&ensp;Turn up the volume for the full experience
+    </p>
+
+    <button onclick="startExperience()"
+      style="background:linear-gradient(135deg,var(--crimson),var(--crimson-mid));
+             color:var(--gold);border:1px solid rgba(201,162,39,0.45);
+             padding:14px 48px;font-family:'Jost',sans-serif;font-size:0.74rem;
+             letter-spacing:0.18em;text-transform:uppercase;cursor:pointer;border-radius:2px;
+             transition:transform 0.22s ease,box-shadow 0.22s ease;"
+      onmouseover="this.style.transform='scale(1.03)';this.style.boxShadow='0 8px 32px rgba(139,26,26,0.5)'"
+      onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none'"
+      onmousedown="this.style.transform='scale(0.98)'"
+    >Enter &rarr;</button>
+  </div>
+</div>
+
+<audio id="bg-music" loop>
+  <source src="music/Shehnai.mpeg" type="audio/mpeg">
+</audio>
+
+
+<!-- ══════════════════════════════════════
+     NAVIGATION
+══════════════════════════════════════ -->
+<nav id="navbar" aria-label="Main navigation">
+  <a href="#hero" style="line-height:0;">
+    <img src="images/logowh.jpeg" alt="Home" style="height:46px;width:46px;object-fit:contain;border-radius:50%;">
+  </a>
+
+  <div id="nav-links" style="display:flex;gap:36px;align-items:center;">
+    <a href="#events"  class="nav-link">Events</a>
+    <a href="#venue"   class="nav-link">Venue</a>
+    <a href="#gallery" class="nav-link">Gallery</a>
+    <a href="#contact" class="nav-link">Contact</a>
+  </div>
+
+  <button id="hamburger" aria-label="Open menu" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div id="mobile-menu" role="dialog" aria-modal="true" aria-label="Navigation">
+  <button onclick="toggleMenu()" aria-label="Close menu"
+    style="position:absolute;top:22px;right:26px;background:none;border:none;
+           color:rgba(255,248,240,0.55);font-size:1.6rem;cursor:pointer;padding:4px;">&#10005;</button>
+  <a href="#events"  class="mobile-nav-link" onclick="toggleMenu()">Events</a>
+  <a href="#venue"   class="mobile-nav-link" onclick="toggleMenu()">Venue</a>
+  <a href="#gallery" class="mobile-nav-link" onclick="toggleMenu()">Gallery</a>
+  <a href="#contact" class="mobile-nav-link" onclick="toggleMenu()">Contact</a>
+</div>
+
+
+<!-- ══════════════════════════════════════
+     HERO
+══════════════════════════════════════ -->
+<section id="hero" style="position:relative;height:100dvh;min-height:600px;overflow:hidden;background:var(--dark);">
+  <img src="images/img1.jpeg" alt="Anuradha and Abhishek"
+       style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;">
+
+  <div style="position:absolute;inset:0;
+    background:linear-gradient(to bottom,rgba(18,6,6,0.22) 0%,rgba(18,6,6,0.04) 32%,rgba(18,6,6,0.62) 70%,rgba(18,6,6,0.96) 100%);"></div>
+  <div style="position:absolute;inset:0;
+    background:radial-gradient(ellipse at 20% 65%,rgba(139,26,26,0.2) 0%,transparent 52%);"></div>
+
+  <div style="position:relative;z-index:2;height:100%;display:flex;flex-direction:column;
+              align-items:center;justify-content:flex-end;text-align:center;
+              padding:0 24px clamp(72px,10vh,100px);">
+
+    <p class="fade-up d1" style="color:var(--gold);font-size:0.68rem;letter-spacing:0.26em;text-transform:uppercase;margin-bottom:20px;opacity:.88;">
+      Together with their families
+    </p>
+    <h1 class="fade-up d2"
+        style="font-family:'Cormorant Garamond',serif;color:var(--cream);
+               font-size:clamp(3.2rem,9vw,6.6rem);font-weight:300;
+               letter-spacing:-0.03em;line-height:1.0;margin-bottom:20px;">
+      Anuradha<br>
+      <span style="color:var(--gold);font-style:italic;font-size:0.7em;">&amp;</span><br>
+      Abhishek
+    </h1>
+    <div class="fade-up d3" style="width:44px;height:1px;background:var(--gold);margin:0 auto 18px;"></div>
+    <p class="fade-up d4" style="color:rgba(255,248,240,0.65);font-size:0.78rem;letter-spacing:0.22em;text-transform:uppercase;">
+      12 July 2026 &ensp;·&ensp; Navi Mumbai
+    </p>
+  </div>
+
+  <div style="position:absolute;bottom:28px;left:50%;transform:translateX(-50%);
+              display:flex;flex-direction:column;align-items:center;gap:7px;opacity:0.4;pointer-events:none;">
+    <span style="color:var(--cream);font-size:0.6rem;letter-spacing:0.18em;text-transform:uppercase;">Scroll</span>
+    <div style="width:1px;height:38px;background:linear-gradient(to bottom,var(--gold),transparent);"></div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     FAMILIES
+══════════════════════════════════════ -->
+<section style="background:var(--dark-mid);padding:90px 24px;text-align:center;position:relative;overflow:hidden;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(201,162,39,0.05) 0%,transparent 65%);pointer-events:none;"></div>
+  <div class="reveal" style="position:relative;z-index:1;max-width:760px;margin:0 auto;">
+    <p style="color:rgba(201,162,39,0.65);font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:22px;">With the blessings of</p>
+    <p style="font-family:'Cormorant Garamond',serif;color:var(--cream);
+              font-size:clamp(1rem,2.8vw,1.35rem);font-weight:300;line-height:2.1;letter-spacing:0.02em;">
+      Ardhendu Purkayastha &amp; Tapati Purkayastha
+      <br><span style="color:rgba(255,248,240,0.32);font-size:0.78em;">together with</span><br>
+      Arun Dutta &amp; Tutul Dutta
+    </p>
+
+    <div style="display:flex;align-items:center;gap:14px;justify-content:center;margin:36px 0;">
+      <div style="flex:1;max-width:110px;height:1px;background:linear-gradient(to right,transparent,rgba(201,162,39,0.4));"></div>
+      <span style="color:var(--gold);font-size:1.3rem;">✦</span>
+      <div style="flex:1;max-width:110px;height:1px;background:linear-gradient(to left,transparent,rgba(201,162,39,0.4));"></div>
+    </div>
+
+    <p style="font-family:'Cormorant Garamond',serif;color:rgba(255,248,240,0.58);
+              font-size:clamp(1rem,2.5vw,1.2rem);font-style:italic;line-height:1.95;">
+      "Your presence is the greatest gift of all —<br>please come just as you are."
+    </p>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     COUNTDOWN
+══════════════════════════════════════ -->
+<section style="background:var(--cream-mid);padding:72px 24px;text-align:center;">
+  <p class="reveal" style="color:var(--crimson);font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:28px;">
+    Counting down to the big day
+  </p>
+  <div id="countdown" class="reveal"
+       style="display:flex;gap:clamp(10px,4vw,52px);justify-content:center;align-items:center;flex-wrap:wrap;">
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     EVENTS
+══════════════════════════════════════ -->
+<section id="events" style="background:var(--cream);padding:100px 24px;">
+  <div style="max-width:720px;margin:0 auto;text-align:center;">
+    <p class="reveal" style="color:var(--crimson);font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:10px;">Save the Date</p>
+    <h2 class="reveal" style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.4rem);
+                               font-weight:400;color:#1A0808;letter-spacing:-0.025em;margin-bottom:56px;">
+      The Celebrations
+    </h2>
+
+    <div class="reveal"
+         style="border:1px solid rgba(139,26,26,0.12);background:#fff;border-radius:4px;
+                padding:clamp(32px,6vw,56px) clamp(22px,6vw,52px);
+                box-shadow:0 6px 48px rgba(139,26,26,0.07),0 1px 4px rgba(139,26,26,0.04);
+                max-width:580px;margin:0 auto;">
+
+      <div style="display:inline-block;background:var(--crimson);color:var(--gold);
+                  padding:6px 22px;border-radius:2px;font-size:0.63rem;letter-spacing:0.16em;
+                  text-transform:uppercase;margin-bottom:28px;">Sunday · 12 July 2026</div>
+
+      <h3 style="font-size:clamp(1.7rem,4vw,2.3rem);font-weight:400;color:#1A0808;margin-bottom:6px;">
+        Wedding &amp; Reception
+      </h3>
+      <p style="color:var(--crimson);font-size:0.82rem;letter-spacing:0.07em;margin-bottom:36px;">
+        Silver Jubilee Hall, Vashi, Navi Mumbai
+      </p>
+
+      <div class="events-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:30px;">
+        <div style="text-align:center;padding:22px 14px;background:var(--cream);border-radius:3px;">
+          <p style="color:var(--crimson);font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:10px;">Ceremony Begins</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,4vw,2.1rem);color:#1A0808;font-weight:400;line-height:1;">6:15 PM</p>
+          <p style="color:rgba(26,8,8,0.36);font-size:0.7rem;margin-top:7px;">onwards</p>
+        </div>
+        <div style="text-align:center;padding:22px 14px;background:var(--cream);border-radius:3px;">
+          <p style="color:var(--crimson);font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;margin-bottom:10px;">Dinner</p>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:clamp(1.6rem,4vw,2.1rem);color:#1A0808;font-weight:400;line-height:1;">7:30 PM</p>
+          <p style="color:rgba(26,8,8,0.36);font-size:0.7rem;margin-top:7px;">until 10:30 PM</p>
+        </div>
+      </div>
+
+      <div style="border-top:1px solid rgba(139,26,26,0.1);padding-top:24px;">
+        <p style="color:rgba(26,8,8,0.5);font-size:0.82rem;line-height:1.85;">
+          👗&ensp;<strong style="color:#1A0808;font-weight:500;">Dress Code:</strong>
+          Wear whatever makes you comfortable.<br>Your presence is what matters most.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     VENUE
+══════════════════════════════════════ -->
+<section id="venue" style="background:var(--dark);padding:100px 24px;">
+  <div style="max-width:1040px;margin:0 auto;">
+    <div class="reveal" style="text-align:center;margin-bottom:64px;">
+      <p style="color:rgba(201,162,39,0.65);font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:10px;">Find Us Here</p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.4rem);
+                 font-weight:400;color:var(--cream);letter-spacing:-0.025em;">The Venue</h2>
+    </div>
+
+    <div class="venue-grid reveal"
+         style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start;">
+
+      <!-- Info + QR -->
+      <div style="display:flex;flex-direction:column;gap:22px;">
+        <div style="background:rgba(255,248,240,0.04);border:1px solid rgba(201,162,39,0.13);border-radius:4px;padding:36px;">
+          <h3 style="font-family:'Cormorant Garamond',serif;color:var(--cream);font-size:1.7rem;font-weight:400;margin-bottom:18px;">
+            Silver Jubilee Hall
+          </h3>
+          <p style="color:rgba(255,248,240,0.48);font-size:0.8rem;letter-spacing:0.06em;line-height:2.1;">
+            Navi Mumbai Sports Association<br>
+            Sector 1A, Vashi<br>
+            Navi Mumbai – 400703<br>
+            (Opposite MGM Hospital)
+          </p>
+          <a href="https://maps.google.com/?q=Navi+Mumbai+Sports+Association+Sector+1A+Vashi+Navi+Mumbai+400703"
+             target="_blank" rel="noopener noreferrer"
+             style="display:inline-flex;align-items:center;gap:8px;margin-top:26px;
+                    color:var(--gold);font-size:0.7rem;letter-spacing:0.14em;text-transform:uppercase;
+                    text-decoration:none;border-bottom:1px solid rgba(201,162,39,0.26);padding-bottom:3px;
+                    transition:color 0.22s ease;"
+             onmouseover="this.style.color='var(--gold-light)'"
+             onmouseout="this.style.color='var(--gold)'">
+            Open in Google Maps &rarr;
+          </a>
+        </div>
+
+        <div style="background:rgba(255,248,240,0.04);border:1px solid rgba(201,162,39,0.13);
+                    border-radius:4px;padding:30px;text-align:center;">
+          <p style="color:rgba(201,162,39,0.62);font-size:0.6rem;letter-spacing:0.2em;text-transform:uppercase;margin-bottom:18px;">
+            Scan for Directions
+          </p>
+          <img src="images/QRcode.jpeg" alt="Venue QR Code"
+               style="width:148px;height:148px;object-fit:contain;background:#fff;
+                      padding:10px;border-radius:4px;display:inline-block;">
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div style="border-radius:4px;overflow:hidden;box-shadow:0 8px 56px rgba(0,0,0,0.45);min-height:420px;">
+        <iframe
+          src="https://maps.google.com/maps?q=Navi+Mumbai+Sports+Association+Sector+1A+Vashi+Navi+Mumbai+400703&output=embed&z=15"
+          width="100%" height="420"
+          style="border:none;display:block;"
+          loading="lazy"
+          allowfullscreen
+          title="Wedding Venue Map"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     GALLERY
+══════════════════════════════════════ -->
+<section id="gallery" style="background:var(--cream-mid);padding:100px 24px;">
+  <div style="max-width:1160px;margin:0 auto;">
+    <div class="reveal" style="text-align:center;margin-bottom:16px;">
+      <p style="color:var(--crimson);font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:10px;">Memories</p>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.4rem);
+                 font-weight:400;color:#1A0808;letter-spacing:-0.025em;margin-bottom:36px;">Gallery</h2>
+
+      <div style="display:inline-flex;border:1px solid rgba(139,26,26,0.2);border-radius:3px;overflow:hidden;">
+        <button class="gallery-tab active"  id="tab-pre" onclick="showTab('pre')">Pre&#8209;Wedding</button>
+        <button class="gallery-tab inactive" id="tab-wed" onclick="showTab('wed')">Wedding</button>
+      </div>
+    </div>
+
+    <!-- Pre-Wedding -->
+    <div id="grid-pre" class="reveal"
+         style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;margin-top:40px;">
+      <div class="gallery-item" style="position:relative;aspect-ratio:3/4;box-shadow:0 4px 28px rgba(139,26,26,0.1);">
+        <img src="images/pre-wedding/img1.jpeg" alt="Pre-Wedding Photo 1">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(18,6,6,0.48) 0%,transparent 52%);pointer-events:none;"></div>
+      </div>
+      <div class="gallery-item" style="position:relative;aspect-ratio:3/4;box-shadow:0 4px 28px rgba(139,26,26,0.1);">
+        <img src="images/pre-wedding/img2.jpeg" alt="Pre-Wedding Photo 2">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(18,6,6,0.48) 0%,transparent 52%);pointer-events:none;"></div>
+      </div>
+      <div class="gallery-item" style="position:relative;aspect-ratio:3/4;box-shadow:0 4px 28px rgba(139,26,26,0.1);">
+        <img src="images/pre-wedding/img3.jpeg" alt="Pre-Wedding Photo 3">
+        <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(18,6,6,0.48) 0%,transparent 52%);pointer-events:none;"></div>
+      </div>
+    </div>
+
+    <!-- Wedding (placeholder) -->
+    <div id="grid-wed" style="display:none;margin-top:40px;">
+      <div style="border:2px dashed rgba(139,26,26,0.17);border-radius:6px;padding:72px 40px;text-align:center;">
+        <p style="font-family:'Cormorant Garamond',serif;color:var(--crimson);font-size:2rem;font-weight:300;margin-bottom:12px;">Coming Soon</p>
+        <p style="color:rgba(26,8,8,0.4);font-size:0.85rem;line-height:1.85;">
+          Wedding photographs will be added here after the celebration.<br>
+          Check back after 12 July 2026!
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     CONTACT
+══════════════════════════════════════ -->
+<section id="contact" style="background:var(--cream);padding:100px 24px;text-align:center;">
+  <div style="max-width:580px;margin:0 auto;">
+    <p class="reveal" style="color:var(--crimson);font-size:0.67rem;letter-spacing:0.22em;text-transform:uppercase;margin-bottom:10px;">Reach Out</p>
+    <h2 class="reveal" style="font-family:'Cormorant Garamond',serif;font-size:clamp(2.2rem,5vw,3.4rem);
+                               font-weight:400;color:#1A0808;letter-spacing:-0.025em;margin-bottom:14px;">
+      Get in Touch
+    </h2>
+    <p class="reveal" style="color:rgba(26,8,8,0.44);font-size:0.84rem;line-height:1.8;margin-bottom:48px;">
+      For any queries about the celebration, feel free to call.
+    </p>
+    <div class="reveal" style="display:flex;flex-direction:column;gap:14px;align-items:center;">
+      <a href="tel:+917710930440" class="contact-card">📞&ensp;+91 77109 30440</a>
+      <a href="tel:+917738857508" class="contact-card">📞&ensp;+91 77388 57508</a>
+      <a href="tel:+919892475166" class="contact-card">📞&ensp;+91 98924 75166</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer style="background:var(--dark);padding:64px 24px 48px;text-align:center;">
+  <img src="images/logowh.jpeg" alt="Logo"
+       style="width:58px;height:58px;object-fit:contain;border-radius:50%;
+              margin:0 auto 24px;display:block;opacity:0.72;">
+  <p style="font-family:'Cormorant Garamond',serif;color:rgba(255,248,240,0.86);
+            font-size:1.3rem;font-style:italic;font-weight:300;margin-bottom:8px;">
+    Anuradha &amp; Abhishek
+  </p>
+  <p style="color:rgba(201,162,39,0.52);font-size:0.63rem;letter-spacing:0.18em;text-transform:uppercase;">
+    12 July 2026
+  </p>
+  <div style="width:40px;height:1px;background:rgba(201,162,39,0.25);margin:22px auto 18px;"></div>
+  <p style="color:rgba(255,248,240,0.2);font-size:0.68rem;letter-spacing:0.05em;">Made with love ♥</p>
+</footer>
+
+
+<!-- ══════════════════════════════════════
+     SCRIPTS
+══════════════════════════════════════ -->
+<script>
+  /* Music overlay */
+  function startExperience() {
+    const overlay = document.getElementById('music-overlay');
+    const music   = document.getElementById('bg-music');
+    overlay.style.opacity = '0';
+    setTimeout(() => { overlay.style.display = 'none'; }, 900);
+    music.volume = 0.38;
+    music.play().catch(() => {});
+  }
+
+  /* Countdown */
+  function renderCountdown() {
+    const target = new Date('2026-07-12T18:15:00');
+    const diff   = target - new Date();
+    const el     = document.getElementById('countdown');
+    if (!el) return;
+
+    if (diff <= 0) {
+      el.innerHTML = `<p style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--crimson);">Today is the big day! 🎉</p>`;
+      return;
+    }
+
+    const units = [
+      { v: Math.floor(diff / 86400000),               l: 'Days' },
+      { v: Math.floor((diff % 86400000) / 3600000),   l: 'Hours' },
+      { v: Math.floor((diff % 3600000)  / 60000),     l: 'Mins' },
+      { v: Math.floor((diff % 60000)    / 1000),      l: 'Secs' },
+    ];
+
+    el.innerHTML = units.map((u, i) => `
+      <div style="text-align:center;min-width:60px;">
+        <div style="font-family:'Cormorant Garamond',serif;
+                    font-size:clamp(2.4rem,7vw,4rem);font-weight:300;
+                    color:var(--crimson);line-height:1;">
+          ${String(u.v).padStart(2,'0')}
+        </div>
+        <div style="color:rgba(26,8,8,0.36);font-size:0.6rem;letter-spacing:0.16em;
+                    text-transform:uppercase;margin-top:8px;">${u.l}</div>
+      </div>
+      ${i < 3 ? `<div style="font-family:'Cormorant Garamond',serif;font-size:2rem;
+                             color:rgba(139,26,26,0.25);align-self:flex-start;margin-top:4px;">:</div>` : ''}
+    `).join('');
+  }
+  renderCountdown();
+  setInterval(renderCountdown, 1000);
+
+  /* Gallery tabs */
+  function showTab(type) {
+    const pre = document.getElementById('grid-pre');
+    const wed = document.getElementById('grid-wed');
+    const tPre = document.getElementById('tab-pre');
+    const tWed = document.getElementById('tab-wed');
+    if (type === 'pre') {
+      pre.style.display = 'grid'; wed.style.display = 'none';
+      tPre.className = 'gallery-tab active'; tWed.className = 'gallery-tab inactive';
+    } else {
+      pre.style.display = 'none'; wed.style.display = 'block';
+      tPre.className = 'gallery-tab inactive'; tWed.className = 'gallery-tab active';
+    }
+  }
+
+  /* Mobile menu */
+  let menuOpen = false;
+  function toggleMenu() {
+    menuOpen = !menuOpen;
+    document.getElementById('mobile-menu').classList.toggle('open', menuOpen);
+    document.body.style.overflow = menuOpen ? 'hidden' : '';
+  }
+
+  /* Navbar scroll effect */
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+  }, { passive: true });
+
+  /* Scroll reveal */
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+</script>
+</body>
+</html>
